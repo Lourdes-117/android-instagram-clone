@@ -1,6 +1,6 @@
 package com.example.inztagram.Models;
 
-public class RegisterModel {
+public class UserRegisterRequest {
     private String userName;
     private String fullName;
     private String emailId;
@@ -22,7 +22,7 @@ public class RegisterModel {
         return password;
     }
 
-    public RegisterModel(String userName, String fullName, String emailId, String password) {
+    public UserRegisterRequest(String userName, String fullName, String emailId, String password) {
         this.userName = userName;
         this.fullName = fullName;
         this.emailId = emailId;

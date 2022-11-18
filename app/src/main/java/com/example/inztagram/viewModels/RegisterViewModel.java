@@ -1,27 +1,46 @@
 package com.example.inztagram.viewModels;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.example.inztagram.Models.RegisterModel;
+import com.example.inztagram.Models.UserRegisterRequest;
+import com.example.inztagram.Models.UserRegisterResponse;
+import com.example.inztagram.apiService.RetroService;
+import com.example.inztagram.apiService.RetrofitService;
 
-public class RegisterViewModel {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class RegisterViewModel extends ViewModel {
+    public RegisterViewModel() {
+        userRegisterResponseMutableLiveData = new MutableLiveData<>();
+    }
+
     private Integer userNameMinLength = 3;
     private Integer passwordMinLength = 4;
     private String emailIDRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
 
+    private MutableLiveData<UserRegisterResponse> userRegisterResponseMutableLiveData;
+
+    public MutableLiveData<UserRegisterResponse> getCreateUserObserver() {
+        return userRegisterResponseMutableLiveData;
+    }
+
     @Nullable
-    public String getRegisterErrorsIfAvailable(RegisterModel registerModel) {
-        if (checkForErrorsInUserName(registerModel.getUserName()) != null) {
-            return checkForErrorsInUserName(registerModel.getUserName());
+    public String getRegisterErrorsIfAvailable(UserRegisterRequest userRegisterRequest) {
+        if (checkForErrorsInUserName(userRegisterRequest.getUserName()) != null) {
+            return checkForErrorsInUserName(userRegisterRequest.getUserName());
         }
-        if (checkForErrorsInName(registerModel.getFullName()) != null) {
-            return checkForErrorsInName(registerModel.getFullName());
+        if (checkForErrorsInName(userRegisterRequest.getFullName()) != null) {
+            return checkForErrorsInName(userRegisterRequest.getFullName());
         }
-        if (checkForErrorsInEmailId(registerModel.getEmailId()) != null) {
-            return checkForErrorsInEmailId(registerModel.getEmailId());
+        if (checkForErrorsInEmailId(userRegisterRequest.getEmailId()) != null) {
+            return checkForErrorsInEmailId(userRegisterRequest.getEmailId());
         }
-        if (checkForErrorsInPassword(registerModel.getPassword()) != null) {
-            return checkForErrorsInPassword(registerModel.getPassword());
+        if (checkForErrorsInPassword(userRegisterRequest.getPassword()) != null) {
+            return checkForErrorsInPassword(userRegisterRequest.getPassword());
         }
         return null;
     }
@@ -65,5 +84,25 @@ public class RegisterViewModel {
             return "Please Enter Valid Email ID";
         }
         return null;
+    }
+
+    public void createNewUser(UserRegisterRequest userRegisterRequest) {
+        RetroService retrofitService = RetrofitService.getRetrofitInstance().create(RetroService.class);
+        Call<UserRegisterResponse> call = retrofitService.createUser(userRegisterRequest);
+        call.enqueue(new Callback<UserRegisterResponse>() {
+            @Override
+            public void onResponse(Call<UserRegisterResponse> call, Response<UserRegisterResponse> response) {
+                if(response.isSuccessful()) {
+                    userRegisterResponseMutableLiveData.postValue(response.body());
+                } else {
+                    userRegisterResponseMutableLiveData.postValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserRegisterResponse> call, Throwable t) {
+                userRegisterResponseMutableLiveData.postValue(null);
+            }
+        });
     }
 }
