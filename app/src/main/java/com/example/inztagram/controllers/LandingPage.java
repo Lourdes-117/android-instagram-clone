@@ -1,4 +1,4 @@
-package com.example.inztagram;
+package com.example.inztagram.controllers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,9 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.example.inztagram.R;
+import com.example.inztagram.auth.LocalAuthService;
 
 public class LandingPage extends AppCompatActivity {
     LinearLayout linearLayout;
@@ -91,6 +94,11 @@ public class LandingPage extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        if(LocalAuthService.getInstance().isUserLoggedIn()) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags (Intent. FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
     }
 }

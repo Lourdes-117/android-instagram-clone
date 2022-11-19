@@ -1,8 +1,10 @@
-package com.example.inztagram;
+package com.example.inztagram.controllers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.inztagram.R;
 
 public class HomeActivity extends AppCompatActivity {
 

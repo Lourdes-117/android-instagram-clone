@@ -1,6 +1,5 @@
-package com.example.inztagram;
+package com.example.inztagram.controllers;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,14 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.inztagram.Models.UserLoginResponse;
 import com.example.inztagram.Models.UserRegisterRequest;
-import com.example.inztagram.Models.UserRegisterResponse;
+import com.example.inztagram.R;
+import com.example.inztagram.auth.LocalAuthService;
 import com.example.inztagram.utility.InztaAppCompatActivity;
 import com.example.inztagram.viewModels.RegisterViewModel;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class RegisterActivity extends InztaAppCompatActivity {
@@ -55,6 +53,7 @@ public class RegisterActivity extends InztaAppCompatActivity {
                     if(userLoginResponse.getError() != null) {
                         RegisterActivity.this.makeErrorSnackBar(userLoginResponse.getError(), parent);
                     } else {
+                        LocalAuthService.getInstance().saveSecretKey(userLoginResponse.getUuid());
                         RegisterActivity.this.onUserRegistrationSuccessful();
                     }
                 }
