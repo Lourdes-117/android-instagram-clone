@@ -4,10 +4,18 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.inztagram.Models.UserLoginRequest;
+import com.example.inztagram.Models.UserLoginResponse;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.Models.UserRegisterResponse;
 import com.example.inztagram.apiService.RetroService;
 import com.example.inztagram.apiService.RetrofitService;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,17 +23,17 @@ import retrofit2.Response;
 
 public class RegisterViewModel extends ViewModel {
     public RegisterViewModel() {
-        userRegisterResponseMutableLiveData = new MutableLiveData<>();
+        userLoginResponseMutableLiveData = new MutableLiveData<>();
     }
 
     private Integer userNameMinLength = 3;
     private Integer passwordMinLength = 4;
     private String emailIDRegex = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
 
-    private MutableLiveData<UserRegisterResponse> userRegisterResponseMutableLiveData;
+    private MutableLiveData<UserLoginResponse> userLoginResponseMutableLiveData;
 
-    public MutableLiveData<UserRegisterResponse> getCreateUserObserver() {
-        return userRegisterResponseMutableLiveData;
+    public MutableLiveData<UserLoginResponse> getCreateUserAndLoginObserver() {
+        return userLoginResponseMutableLiveData;
     }
 
     @Nullable
@@ -93,15 +101,42 @@ public class RegisterViewModel extends ViewModel {
             @Override
             public void onResponse(Call<UserRegisterResponse> call, Response<UserRegisterResponse> response) {
                 if(response.isSuccessful()) {
-                    userRegisterResponseMutableLiveData.postValue(response.body());
+                    if(response.body().getError() != null) {
+                        // Registration Failed
+                        UserLoginResponse loginResponse = new UserLoginResponse();
+                        loginResponse.setError(response.body().getError());
+                        userLoginResponseMutableLiveData.postValue(loginResponse);
+                    } else {
+                        // Registration Successful -> Login
+                        UserLoginRequest userLoginRequest = new UserLoginRequest();
+                        userLoginRequest.setUserName(userLoginRequest.getUserName());
+                        userLoginRequest.setPassword(userLoginRequest.getPassword());
+                        loginUser(userLoginRequest);
+                    }
                 } else {
-                    userRegisterResponseMutableLiveData.postValue(null);
+                    userLoginResponseMutableLiveData.postValue(null);
                 }
             }
 
             @Override
             public void onFailure(Call<UserRegisterResponse> call, Throwable t) {
-                userRegisterResponseMutableLiveData.postValue(null);
+                userLoginResponseMutableLiveData.postValue(null);
+            }
+        });
+    }
+
+    private void loginUser(UserLoginRequest userLoginRequest) {
+        RetroService retrofitService = RetrofitService.getRetrofitInstance().create(RetroService.class);
+        Call<UserLoginResponse> call = retrofitService.loginUser(userLoginRequest);
+        call.enqueue(new Callback<UserLoginResponse>() {
+            @Override
+            public void onResponse(Call<UserLoginResponse> call, Response<UserLoginResponse> response) {
+                userLoginResponseMutableLiveData.postValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<UserLoginResponse> call, Throwable t) {
+                userLoginResponseMutableLiveData.postValue(null);
             }
         });
     }

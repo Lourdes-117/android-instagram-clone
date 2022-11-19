@@ -1,5 +1,7 @@
 package com.example.inztagram.apiService;
 
+import com.example.inztagram.Models.UserLoginRequest;
+import com.example.inztagram.Models.UserLoginResponse;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.Models.UserRegisterResponse;
 
@@ -13,4 +15,8 @@ public interface RetroService {
     @POST("userRegister")
     @Headers({"Accept:application/json", "Content-Type:application/json"})
     Call<UserRegisterResponse> createUser(@Body UserRegisterRequest userRegisterRequest);
+
+    @POST("login")
+    @Headers({"Accept:application/json", "Content-Type:application/json"})
+    Call<UserLoginResponse> loginUser(@Body UserLoginRequest userLoginRequest);
 }

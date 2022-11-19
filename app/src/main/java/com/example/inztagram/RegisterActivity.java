@@ -11,13 +11,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.inztagram.Models.UserLoginResponse;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.Models.UserRegisterResponse;
+import com.example.inztagram.utility.InztaAppCompatActivity;
 import com.example.inztagram.viewModels.RegisterViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends InztaAppCompatActivity {
 
     private TextInputEditText textInputUserName, textInputFullName, textInputEmailID, textInputPassword;
     private Button registerButton;
@@ -38,14 +40,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void initViewModel() {
         this.viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
-        viewModel.getCreateUserObserver().observe(this, new Observer<UserRegisterResponse>() {
+        viewModel.getCreateUserAndLoginObserver().observe(this, new Observer<UserLoginResponse>() {
             @Override
-            public void onChanged(UserRegisterResponse userRegisterResponse) {
-                if((userRegisterResponse == null)) {
-                    RegisterActivity.this.onUserRegistrationFailed(null);
+            public void onChanged(UserLoginResponse userLoginResponse) {
+                if(userLoginResponse == null) {
+                    RegisterActivity.this.makeErrorSnackBar(null, parent);
                 } else {
-                    if(userRegisterResponse.getError() != null) {
-                        RegisterActivity.this.onUserRegistrationFailed(userRegisterResponse.getError());
+                    if(userLoginResponse.getError() != null) {
+                        RegisterActivity.this.makeErrorSnackBar(userLoginResponse.getError(), parent);
                     } else {
                         RegisterActivity.this.onUserRegistrationSuccessful();
                     }
@@ -79,30 +81,10 @@ public class RegisterActivity extends AppCompatActivity {
                 if(registerError == null) {
                     viewModel.createNewUser(userRegisterRequest);
                 } else {
-                    Snackbar.make(parent, registerError, Snackbar.LENGTH_SHORT)
-                            .setAction("Ok", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-
-                                }
-                            }).show();
+                    makeErrorSnackBar(registerError, parent);
                 }
             }
         });
-    }
-
-    private void onUserRegistrationFailed(String errorTextString) {
-        String messageToShow = "Call Failed. Please try again later";
-        if(errorTextString != null) {
-            messageToShow = errorTextString;
-        }
-        Snackbar.make(RegisterActivity.this, parent, messageToShow, Snackbar.LENGTH_SHORT)
-                .setAction("Ok", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                }).show();
     }
 
     private void onUserRegistrationSuccessful() {
