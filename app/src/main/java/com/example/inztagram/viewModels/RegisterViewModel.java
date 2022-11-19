@@ -10,13 +10,6 @@ import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.Models.UserRegisterResponse;
 import com.example.inztagram.apiService.RetroService;
 import com.example.inztagram.apiService.RetrofitService;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-
-import org.json.JSONObject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

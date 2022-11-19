@@ -112,6 +112,9 @@ public class RegisterActivity extends InztaAppCompatActivity {
     }
 
     private void onUserRegistrationSuccessful() {
-        Toast.makeText(this, "Successful", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags (Intent. FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }
