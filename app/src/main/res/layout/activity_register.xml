@@ -72,10 +72,10 @@
             android:id="@+id/button_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
+            android:text="Sign Up"
             android:layout_marginTop="15dp"
-            android:backgroundTint="#eee"
-            android:textColor="@color/black"/>
+            android:backgroundTint="#117FF4"
+            android:textColor="@color/white"/>
         <TextView
             android:id="@+id/textView_login"
             android:layout_width="match_parent"
