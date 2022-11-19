@@ -87,4 +87,10 @@ public class LandingPage extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 }

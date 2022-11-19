@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.example.inztagram.Models.UserLoginRequest;
 import com.example.inztagram.Models.UserLoginResponse;
-import com.example.inztagram.auth.AuthService;
+import com.example.inztagram.auth.LocalAuthService;
 import com.example.inztagram.utility.InztaAppCompatActivity;
 import com.example.inztagram.viewModels.LoginViewModel;
 import com.google.android.material.textfield.TextInputEditText;
@@ -56,7 +56,7 @@ public class LoginActivity extends InztaAppCompatActivity {
                     if(userLoginResponse.getError() != null) {
                         LoginActivity.this.makeErrorSnackBar(userLoginResponse.getError(), parent);
                     } else if(userLoginResponse.getUuid() != null) {
-                        AuthService.saveSecretKey(userLoginResponse.getUuid());
+                        LocalAuthService.getInstance().saveSecretKey(userLoginResponse.getUuid());
                         LoginActivity.this.handleUserLoginSuccessful();
                     } else {
                         LoginActivity.this.makeErrorSnackBar(null, parent);
