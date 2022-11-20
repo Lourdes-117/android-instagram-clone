@@ -6,9 +6,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.yalantis.ucrop.UCrop;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,13 +20,14 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.util.UUID;
 
 public class PostImageActivity extends InztaAppCompatActivity {
-    TextView textViewPost;
+    Button buttonPost;
     ImageView imageViewImageToPost;
     EditText editTextDescription;
     ImageView imageViewClose;
@@ -38,21 +41,28 @@ public class PostImageActivity extends InztaAppCompatActivity {
         setContentView(R.layout.activity_post_image);
 
         setElements();
+        setInitialView();
         setOnClickListeners();
 
-        mGetContent.launch("image/*");
+        showImagePicker();
    }
 
     private void setElements() {
-        textViewPost = findViewById(R.id.textView_post);
+        buttonPost = findViewById(R.id.button_post);
         imageViewImageToPost = findViewById(R.id.imageView_toPost);
         imageViewClose = findViewById(R.id.imageView_close);
         editTextDescription = findViewById(R.id.editText_description);
         parent = findViewById(R.id.parent);
     }
 
+    private void setInitialView() {
+        buttonPost.setEnabled(false);
+        buttonPost.setTextColor(Color.GRAY);
+    }
+
     private void setOnClickListeners() {
         handleCloseButton();
+        handleOnTapImageToPickImage();
         handleImageSelected();
     }
 
@@ -75,11 +85,26 @@ public class PostImageActivity extends InztaAppCompatActivity {
         });
     }
 
+    private void showImagePicker() {
+        mGetContent.launch("image/*");
+    }
+
+    private void handleOnTapImageToPickImage() {
+        imageViewImageToPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImagePicker();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
+            buttonPost.setEnabled(true);
+            buttonPost.setTextColor(Color.BLUE);
             imageViewImageToPost.setImageURI(resultUri);
         } else if(resultCode == UCrop.RESULT_ERROR) {
             makeErrorSnackBar(UCrop.getError(data).toString(), parent);
