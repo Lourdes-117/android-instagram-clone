@@ -1,7 +1,10 @@
 package com.example.inztagram.controllers;
 
+import com.example.inztagram.Models.PostUploadResponse;
 import com.example.inztagram.R;
 import com.example.inztagram.utility.InztaAppCompatActivity;
+import com.example.inztagram.viewModels.LoginViewModel;
+import com.example.inztagram.viewModels.PostImageViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.yalantis.ucrop.UCrop;
 
@@ -22,18 +25,23 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
 import java.util.UUID;
 
 public class PostImageActivity extends InztaAppCompatActivity {
-    Button buttonPost;
-    ImageView imageViewImageToPost;
-    EditText editTextDescription;
-    ImageView imageViewClose;
-    ActivityResultLauncher<String>  mGetContent;
-    LinearLayout parent;
+    private Button buttonPost;
+    private ImageView imageViewImageToPost;
+    private EditText editTextDescription;
+    private ImageView imageViewClose;
+    private ActivityResultLauncher<String>  mGetContent;
+    private LinearLayout parent;
 
+    private PostImageViewModel viewModel;
+
+    private Uri selectedImageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +50,8 @@ public class PostImageActivity extends InztaAppCompatActivity {
 
         setElements();
         setInitialView();
+        initViewModel();
         setOnClickListeners();
-
         showImagePicker();
    }
 
@@ -64,6 +72,12 @@ public class PostImageActivity extends InztaAppCompatActivity {
         handleCloseButton();
         handleOnTapImageToPickImage();
         handleImageSelected();
+        handleOnTapPost();
+    }
+
+    private void initViewModel() {
+        this.viewModel = new ViewModelProvider(this).get(PostImageViewModel.class);
+        this.addObservers();
     }
 
     private void handleImageSelected() {
@@ -98,17 +112,42 @@ public class PostImageActivity extends InztaAppCompatActivity {
         });
     }
 
+    private void addObservers() {
+        viewModel.getPostUploadResponseMutableLiveData().observe(this, new Observer<PostUploadResponse>() {
+            @Override
+            public void onChanged(PostUploadResponse postUploadResponse) {
+                if(postUploadResponse == null) {
+                    makeErrorSnackBar(null, parent);
+                } else if(postUploadResponse.getError() != null) {
+                    makeErrorSnackBar(postUploadResponse.getError(), parent);
+                } else {
+                    System.out.println(postUploadResponse.getSuccess());
+                }
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
+            this.selectedImageUri = resultUri;
             buttonPost.setEnabled(true);
             buttonPost.setTextColor(Color.BLUE);
             imageViewImageToPost.setImageURI(resultUri);
         } else if(resultCode == UCrop.RESULT_ERROR) {
             makeErrorSnackBar(UCrop.getError(data).toString(), parent);
         }
+    }
+
+    private void handleOnTapPost() {
+        buttonPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.postImage(selectedImageUri, editTextDescription.getText().toString());
+            }
+        });
     }
 
     private void handleCloseButton() {
