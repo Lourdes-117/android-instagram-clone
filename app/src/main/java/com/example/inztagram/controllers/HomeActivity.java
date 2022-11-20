@@ -5,8 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.inztagram.R;
+import com.example.inztagram.utility.InztaAppCompatActivity;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends InztaAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

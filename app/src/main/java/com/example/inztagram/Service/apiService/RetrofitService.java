@@ -1,4 +1,4 @@
-package com.example.inztagram.apiService;
+package com.example.inztagram.Service.apiService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

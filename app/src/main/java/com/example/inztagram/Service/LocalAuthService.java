@@ -1,4 +1,4 @@
-package com.example.inztagram.auth;
+package com.example.inztagram.Service;
 
 import android.content.Context;
 import android.content.SharedPreferences;

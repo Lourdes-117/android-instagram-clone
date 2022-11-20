@@ -1,4 +1,4 @@
-package com.example.inztagram.apiService;
+package com.example.inztagram.Service.apiService;
 
 import com.example.inztagram.Models.UserLoginRequest;
 import com.example.inztagram.Models.UserLoginResponse;

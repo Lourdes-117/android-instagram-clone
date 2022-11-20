@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.inztagram.Models.UserLoginRequest;
 import com.example.inztagram.Models.UserLoginResponse;
-import com.example.inztagram.apiService.RetroService;
-import com.example.inztagram.apiService.RetrofitService;
+import com.example.inztagram.Service.apiService.RetroService;
+import com.example.inztagram.Service.apiService.RetrofitService;
 
 import retrofit2.Call;
 import retrofit2.Callback;

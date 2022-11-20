@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.inztagram.Models.UserLoginResponse;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.R;
-import com.example.inztagram.auth.LocalAuthService;
+import com.example.inztagram.Service.LocalAuthService;
 import com.example.inztagram.utility.InztaAppCompatActivity;
 import com.example.inztagram.viewModels.RegisterViewModel;
 import com.google.android.material.textfield.TextInputEditText;

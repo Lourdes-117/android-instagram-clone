@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.inztagram.R;
-import com.example.inztagram.auth.LocalAuthService;
+import com.example.inztagram.Service.LocalAuthService;
 
 public class LandingPage extends AppCompatActivity {
     LinearLayout linearLayout;
