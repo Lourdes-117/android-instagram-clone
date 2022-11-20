@@ -19,6 +19,13 @@
         android:theme="@style/Theme.Inztagram"
         tools:targetApi="31">
         <activity
+            android:name=".controllers.PostImageActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".controllers.HomeActivity"
             android:exported="false">
             <meta-data
