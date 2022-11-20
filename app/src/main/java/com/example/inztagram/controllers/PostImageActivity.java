@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -116,12 +117,14 @@ public class PostImageActivity extends InztaAppCompatActivity {
         viewModel.getPostUploadResponseMutableLiveData().observe(this, new Observer<PostUploadResponse>() {
             @Override
             public void onChanged(PostUploadResponse postUploadResponse) {
+                dismissLoadingIndicator();
                 if(postUploadResponse == null) {
                     makeErrorSnackBar(null, parent);
                 } else if(postUploadResponse.getError() != null) {
                     makeErrorSnackBar(postUploadResponse.getError(), parent);
                 } else {
-                    System.out.println(postUploadResponse.getSuccess());
+                    Toast.makeText(PostImageActivity.this, postUploadResponse.getSuccess(), Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
@@ -145,6 +148,7 @@ public class PostImageActivity extends InztaAppCompatActivity {
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showLoadingIndicator();
                 viewModel.postImage(selectedImageUri, editTextDescription.getText().toString());
             }
         });

@@ -8,9 +8,7 @@ import com.example.inztagram.Models.PostUploadResponse;
 import com.example.inztagram.Service.LocalAuthService;
 import com.example.inztagram.Service.apiService.RetroService;
 import com.example.inztagram.Service.apiService.RetrofitService;
-
 import java.io.File;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
