@@ -1,5 +1,6 @@
 package com.example.inztagram.viewModels;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -55,7 +56,7 @@ public class ProfileViewModel extends ViewModel {
         });
     }
 
-    public void uploadProfilePhoto(File imageFile) {
+    public void uploadProfilePhoto(byte[] imageFile) {
         String userId = LocalAuthService.getInstance().getSecretKey();
         String userName = LocalAuthService.getInstance().getUserName();
 //        File imageFile = new File(uri.getPath());
