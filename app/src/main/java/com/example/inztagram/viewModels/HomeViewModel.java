@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.inztagram.Models.HomePostRequest;
-import com.example.inztagram.Models.HomePostResponse;
 import com.example.inztagram.Models.PostModel;
 import com.example.inztagram.Service.LocalAuthService;
 import com.example.inztagram.Service.apiService.RetroService;

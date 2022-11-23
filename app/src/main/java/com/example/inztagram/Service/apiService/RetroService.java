@@ -1,5 +1,6 @@
 package com.example.inztagram.Service.apiService;
 
+import com.example.inztagram.Models.GetDetailsOfUserRequest;
 import com.example.inztagram.Models.HomePostRequest;
 import com.example.inztagram.Models.HomePostResponse;
 import com.example.inztagram.Models.PostModel;
@@ -40,4 +41,8 @@ public interface RetroService {
     @POST("get-posts")
     @Headers({"Accept:application/json", "Content-Type:application/json"})
     Call<List<PostModel>> getHomePagePosts(@Body HomePostRequest homePostRequest);
+
+    @POST("getDetailsOfUser")
+    @Headers({"Accept:application/json", "Content-Type:application/json"})
+    Call<UserRegisterRequest> getDetailsOfUser(@Body GetDetailsOfUserRequest getDetailsOfUserRequest);
 }

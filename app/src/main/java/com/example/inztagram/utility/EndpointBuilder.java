@@ -13,4 +13,14 @@ public class EndpointBuilder {
         endpoint = endpoint.replace(fileIdNameToReplace, fileId);
         return endpoint;
     }
+
+    public static String getProfileImageUrlForUserName(String userName) {
+        String userIdToReplace = "<enter-userId-here>";
+        String userNameToReplace = "<enter-username-here>";
+        String endpoint = RetrofitService.baseURL+"fetch-profile-photo?userId="+userIdToReplace+"&neededUserName="+userNameToReplace;
+        String userId = LocalAuthService.getInstance().getSecretKey();
+        endpoint = endpoint.replace(userIdToReplace, userId);
+        endpoint = endpoint.replace(userNameToReplace, userName);
+        return endpoint;
+    }
 }

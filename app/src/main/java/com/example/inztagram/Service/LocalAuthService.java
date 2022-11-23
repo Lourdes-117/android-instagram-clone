@@ -8,6 +8,7 @@ import com.example.inztagram.MyApplication;
 public class LocalAuthService {
     private final String SHARED_PREFS = "SHARED_PREFERENCES";
     private final String USER_UUID = "SHARED_PREFERENCES_USER_UUID";
+    private final String USERNAME = "SHARED_PREFERENCES_USERNAME";
     private LocalAuthService() {
     }
     private static LocalAuthService localAuthService;
@@ -29,6 +30,19 @@ public class LocalAuthService {
     public String getSecretKey() {
         SharedPreferences sharedPreferences = MyApplication.getAppContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String uuidString = sharedPreferences.getString(USER_UUID, null);
+        return uuidString;
+    }
+
+    public void saveUserName(String userName) {
+        SharedPreferences sharedPreferences = MyApplication.getAppContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USERNAME, userName);
+        editor.apply();
+    }
+
+    public String getUserName() {
+        SharedPreferences sharedPreferences = MyApplication.getAppContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        String uuidString = sharedPreferences.getString(USERNAME, null);
         return uuidString;
     }
 

@@ -3,11 +3,8 @@ package com.example.inztagram.controllers;
 import com.example.inztagram.Models.PostUploadResponse;
 import com.example.inztagram.R;
 import com.example.inztagram.utility.InztaAppCompatActivity;
-import com.example.inztagram.viewModels.LoginViewModel;
 import com.example.inztagram.viewModels.PostImageViewModel;
-import com.google.android.material.snackbar.Snackbar;
 import com.yalantis.ucrop.UCrop;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,18 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.io.File;
 import java.util.UUID;
 

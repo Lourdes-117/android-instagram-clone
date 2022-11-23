@@ -46,6 +46,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 .load(EndpointBuilder.getImageUrl(post.getFileId()))
                 .centerCrop()
                 .into(holder.postImage);
+        holder.userName.setText(post.getUserName());
+        holder.numberOfLikes.setText(post.getLikes().size() + "Likes");
+        holder.imageCaption.setText(post.getImageCaption());
     }
 
     @Override

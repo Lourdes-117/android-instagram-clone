@@ -56,6 +56,7 @@ public class LoginActivity extends InztaAppCompatActivity {
                         LoginActivity.this.makeErrorSnackBar(userLoginResponse.getError(), parent);
                     } else if(userLoginResponse.getUuid() != null) {
                         LocalAuthService.getInstance().saveSecretKey(userLoginResponse.getUuid());
+                        LocalAuthService.getInstance().saveUserName(textInputUserName.getText().toString());
                         LoginActivity.this.handleUserLoginSuccessful();
                     } else {
                         LoginActivity.this.makeErrorSnackBar(null, parent);
