@@ -1,13 +1,19 @@
 package com.example.inztagram.fragments;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.bumptech.glide.Glide;
+import com.example.inztagram.utility.EndpointBuilder;
 import com.yalantis.ucrop.UCrop;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +21,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.R;
-import com.example.inztagram.utility.EndpointBuilder;
 import com.example.inztagram.viewModels.ProfileViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.File;
@@ -84,11 +88,12 @@ public class ProfileFragment extends Fragment {
         emailIdEditText.setText(userRegisterRequest.getEmailId());
         userNameEditText.setText(userRegisterRequest.getUserName());
         fullNameEditText.setText(userRegisterRequest.getFullName());
-        Glide.with(view.getContext())
-                .asBitmap()
-                .load(EndpointBuilder.getProfileImageUrlForUserName(userRegisterRequest.getUserName()))
-                .optionalCircleCrop()
-                .into(profileImageView);
+        Drawable drawable = profileImageView.getDrawable();
+//        Glide.with(view.getContext())
+//                .asBitmap()
+//                .load(EndpointBuilder.getProfileImageUrlForUserName(userRegisterRequest.getUserName()))
+//                .error(drawable)
+//                .into(profileImageView);
     }
 
     private void setOnClickListeners() {
@@ -125,11 +130,15 @@ public class ProfileFragment extends Fragment {
                 options.setContrastEnabled(true);
                 options.setSharpnessEnabled(true);
                 options.setSaturationEnabled(true);
-                UCrop.of(result, Uri.fromFile(new File(getActivity().getCacheDir(), destinationUri)))
+                Uri fileUri = Uri.fromFile(new File(getActivity().getCacheDir(), destinationUri));
+                UCrop.of(result, fileUri)
                         .withOptions(options)
                         .withAspectRatio(0,0)
                         .withMaxResultSize(1000, 1000)
                         .start(getActivity());
+                profileImageView.setImageURI(result);
+                File file = new File(result.getPath());
+                viewModel.uploadProfilePhoto(file);
             }
         });
     }

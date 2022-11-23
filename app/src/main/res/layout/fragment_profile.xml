@@ -24,10 +24,11 @@
             android:elevation="15dp"
             app:cardCornerRadius="75dp"
             android:layout_centerHorizontal="true">
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/profile_image"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"/>
+                    android:src="@drawable/ic_person_fill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
         </androidx.cardview.widget.CardView>
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/button_edit"
@@ -37,7 +38,8 @@
                 android:src="@drawable/ic_edit"
                 android:layout_alignBottom="@id/cardView_profile_image"
                 android:layout_alignEnd="@id/cardView_profile_image"
-                android:tint="#ffffff"/>
+                android:tint="#ffffff"
+                android:contentDescription="Edit" />
         </RelativeLayout>
 
         <com.google.android.material.textfield.TextInputLayout

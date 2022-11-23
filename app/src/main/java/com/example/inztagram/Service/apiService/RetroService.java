@@ -45,4 +45,9 @@ public interface RetroService {
     @POST("getDetailsOfUser")
     @Headers({"Accept:application/json", "Content-Type:application/json"})
     Call<UserRegisterRequest> getDetailsOfUser(@Body GetDetailsOfUserRequest getDetailsOfUserRequest);
+
+    @Multipart
+    @POST("upload-profile-photo")
+    Call<PostUploadResponse> uploadProfilePhoto(@Part MultipartBody.Part imageFile,
+                                             @Part("userId")RequestBody userId);
 }
