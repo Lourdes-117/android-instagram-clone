@@ -1,5 +1,7 @@
 package com.example.inztagram.Models;
 
+import com.example.inztagram.Service.LocalAuthService;
+
 import java.util.ArrayList;
 
 public class PostModel {
@@ -47,5 +49,13 @@ public class PostModel {
 
     public void setLikes(ArrayList<String> likes) {
         this.likes = likes;
+    }
+
+    public Boolean isPostLiked() {
+        String userName = LocalAuthService.getInstance().getUserName();
+        if(likes == null || userName == null) {
+            return false;
+        }
+        return likes.contains(userName);
     }
 }

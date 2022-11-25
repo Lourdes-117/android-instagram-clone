@@ -3,6 +3,8 @@ package com.example.inztagram.Service.apiService;
 import com.example.inztagram.Models.GetDetailsOfUserRequest;
 import com.example.inztagram.Models.HomePostRequest;
 import com.example.inztagram.Models.HomePostResponse;
+import com.example.inztagram.Models.LikeOrUnlikePostRequest;
+import com.example.inztagram.Models.LikeOrUnlikePostResponse;
 import com.example.inztagram.Models.PostModel;
 import com.example.inztagram.Models.PostUploadResponse;
 import com.example.inztagram.Models.UserLoginRequest;
@@ -50,4 +52,7 @@ public interface RetroService {
     @POST("upload-profile-photo")
     Call<PostUploadResponse> uploadProfilePhoto(@Part MultipartBody.Part imageFile,
                                              @Part("userId")RequestBody userId);
+    @POST("like-or-unlike-post")
+    @Headers({"Accept:application/json", "Content-Type:application/json"})
+    Call<LikeOrUnlikePostResponse> likeOrUnlikePost(@Body LikeOrUnlikePostRequest likeOrUnlikePostRequest);
 }

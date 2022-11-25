@@ -10,12 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.inztagram.Models.LikeOrUnlikePostRequest;
+import com.example.inztagram.Models.LikeOrUnlikePostResponse;
 import com.example.inztagram.Models.PostModel;
+import com.example.inztagram.Models.UserLoginResponse;
 import com.example.inztagram.R;
+import com.example.inztagram.Service.LocalAuthService;
+import com.example.inztagram.Service.apiService.RetroService;
+import com.example.inztagram.Service.apiService.RetrofitService;
 import com.example.inztagram.utility.EndpointBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
@@ -42,7 +52,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostModel post = posts.get(position);
+
+        holder.postId = post.getFileId();
         setProfilePhoto(holder, post.getUserName());
+        holder.setLikedOrUnlikedIcon(post.isPostLiked());
+        holder.setNumberOfLikes(post.getLikes().size());
+
         Glide.with(context)
                 .asBitmap()
                 .load(EndpointBuilder.getImageUrl(post.getFileId()))
@@ -79,9 +94,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public TextView numberOfLikes;
         public TextView imageCaption;
 
+        private String likesString = "Likes";
+        private Boolean isLiked = false;
+        private Integer numberOfLikesForPostInt = 0;
+        private String postId;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             setElements();
+            setOnClickListeners();
         }
 
         public void setElements() {
@@ -95,6 +116,61 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             userName = itemView.findViewById(R.id.textView_userName);
             numberOfLikes = itemView.findViewById(R.id.number_of_likes);
             imageCaption = itemView.findViewById(R.id.post_caption);
+        }
+
+        private void setOnClickListeners() {
+            setOnClickListenerForLikes();
+        }
+
+        public void setLikedOrUnlikedIcon(Boolean isLiked) {
+            this.isLiked = isLiked;
+            likeImage.setImageResource( isLiked ? R.drawable.ic_like_liked : R.drawable.ic_like_not_liked);
+        }
+
+        public void setNumberOfLikes(Integer numberOfLikesForPost) {
+            if(numberOfLikesForPost == null || numberOfLikesForPost < 0 ) {
+                numberOfLikesForPost = 0;
+            }
+            numberOfLikesForPostInt = numberOfLikesForPost;
+            numberOfLikes.setText(numberOfLikesForPost + likesString);
+        }
+
+        private void setOnClickListenerForLikes() {
+            likeImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RetroService retrofitService = RetrofitService.getRetrofitInstance().create(RetroService.class);
+
+                    LikeOrUnlikePostRequest likeOrUnlikePostRequest = new LikeOrUnlikePostRequest();
+                    likeOrUnlikePostRequest.setUserId(LocalAuthService.getInstance().getSecretKey());
+                    likeOrUnlikePostRequest.setPostId(postId);
+
+                    if(isLiked) {
+                        isLiked = !isLiked;
+                        if(numberOfLikesForPostInt != null) {
+                            setNumberOfLikes(numberOfLikesForPostInt-1);
+                            setLikedOrUnlikedIcon(isLiked);
+                        }
+                    } else {
+                        isLiked = !isLiked;
+                        setNumberOfLikes(numberOfLikesForPostInt+1);
+                        setLikedOrUnlikedIcon(isLiked);
+                    }
+
+                    Call<LikeOrUnlikePostResponse> call = retrofitService.likeOrUnlikePost(likeOrUnlikePostRequest);
+                    call.enqueue(new Callback<LikeOrUnlikePostResponse>() {
+                        @Override
+                        public void onResponse(Call<LikeOrUnlikePostResponse> call, Response<LikeOrUnlikePostResponse> response) {
+                            return;
+                        }
+
+                        @Override
+                        public void onFailure(Call<LikeOrUnlikePostResponse> call, Throwable t) {
+                            return;
+                        }
+                    });
+                }
+            });
         }
     }
 }
