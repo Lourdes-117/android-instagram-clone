@@ -17,17 +17,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.R;
 import com.example.inztagram.utility.EndpointBuilder;
 import com.example.inztagram.viewModels.ProfileViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.yalantis.ucrop.UCrop;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.UUID;
 
 public class ProfileFragment extends Fragment {
     @Override
@@ -109,11 +105,11 @@ public class ProfileFragment extends Fragment {
         Glide.with(view.getContext())
                 .asBitmap()
                 .load(EndpointBuilder.getProfileImageUrlForUserName(userRegisterRequest.getUserName()))
+                .error(drawable)
                 .into(profileImageView);
     }
 
     private void setOnClickListeners() {
-        handleImageSelected();
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,10 +130,6 @@ public class ProfileFragment extends Fragment {
 
     private void handleEditProfilePic() {
         showImagePicker();
-    }
-
-    private void handleImageSelected() {
-
     }
 
     private void showImagePicker() {

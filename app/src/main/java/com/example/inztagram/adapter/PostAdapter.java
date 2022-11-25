@@ -1,6 +1,7 @@
 package com.example.inztagram.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostModel post = posts.get(position);
+        setProfilePhoto(holder, post.getUserName());
         Glide.with(context)
                 .asBitmap()
                 .load(EndpointBuilder.getImageUrl(post.getFileId()))
@@ -49,6 +51,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.userName.setText(post.getUserName());
         holder.numberOfLikes.setText(post.getLikes().size() + "Likes");
         holder.imageCaption.setText(post.getImageCaption());
+    }
+
+    private void setProfilePhoto(ViewHolder holder, String userName) {
+        Drawable drawable = holder.profileImage.getDrawable();
+        Glide.with(holder.itemView.getContext())
+                .asBitmap()
+                .load(EndpointBuilder.getProfileImageUrlForUserName(userName))
+                .error(drawable)
+                .into(holder.profileImage);
     }
 
     @Override
