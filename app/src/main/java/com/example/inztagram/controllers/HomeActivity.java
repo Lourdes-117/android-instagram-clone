@@ -1,7 +1,6 @@
 package com.example.inztagram.controllers;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -52,7 +51,7 @@ public class HomeActivity extends InztaAppCompatActivity {
                         selectorFragment = null;
                         startActivity(new Intent(HomeActivity.this, PostImageActivity.class));
                         break;
-                    case R.id.nav_heart:
+                    case R.id.nav_saved:
                         selectorFragment = new NotificationFragment();
                         break;
                     case R.id.nav_profile:

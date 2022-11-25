@@ -49,6 +49,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PostModel post = posts.get(position);
@@ -57,6 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         setProfilePhoto(holder, post.getUserName());
         holder.setLikedOrUnlikedIcon(post.isPostLiked());
         holder.setNumberOfLikes(post.getLikes().size());
+        setOnClickListenerForLikes(holder);
 
         Glide.with(context)
                 .asBitmap()
@@ -75,6 +78,44 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 .load(EndpointBuilder.getProfileImageUrlForUserName(userName))
                 .error(drawable)
                 .into(holder.profileImage);
+    }
+
+    private void setOnClickListenerForLikes(ViewHolder holder) {
+        holder.likeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RetroService retrofitService = RetrofitService.getRetrofitInstance().create(RetroService.class);
+
+                LikeOrUnlikePostRequest likeOrUnlikePostRequest = new LikeOrUnlikePostRequest();
+                likeOrUnlikePostRequest.setUserId(LocalAuthService.getInstance().getSecretKey());
+                likeOrUnlikePostRequest.setPostId(holder.postId);
+
+                if(holder.isLiked) {
+                    holder.isLiked = !holder.isLiked;
+                    if(holder.numberOfLikesForPostInt != null) {
+                        holder.setNumberOfLikes(holder.numberOfLikesForPostInt-1);
+                        holder.setLikedOrUnlikedIcon(holder.isLiked);
+                    }
+                } else {
+                    holder.isLiked = !holder.isLiked;
+                    holder.setNumberOfLikes(holder.numberOfLikesForPostInt+1);
+                    holder.setLikedOrUnlikedIcon(holder.isLiked);
+                }
+
+                Call<LikeOrUnlikePostResponse> call = retrofitService.likeOrUnlikePost(likeOrUnlikePostRequest);
+                call.enqueue(new Callback<LikeOrUnlikePostResponse>() {
+                    @Override
+                    public void onResponse(Call<LikeOrUnlikePostResponse> call, Response<LikeOrUnlikePostResponse> response) {
+                        return;
+                    }
+
+                    @Override
+                    public void onFailure(Call<LikeOrUnlikePostResponse> call, Throwable t) {
+                        return;
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -102,7 +143,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             setElements();
-            setOnClickListeners();
         }
 
         public void setElements() {
@@ -118,10 +158,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             imageCaption = itemView.findViewById(R.id.post_caption);
         }
 
-        private void setOnClickListeners() {
-            setOnClickListenerForLikes();
-        }
-
         public void setLikedOrUnlikedIcon(Boolean isLiked) {
             this.isLiked = isLiked;
             likeImage.setImageResource( isLiked ? R.drawable.ic_like_liked : R.drawable.ic_like_not_liked);
@@ -133,44 +169,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
             numberOfLikesForPostInt = numberOfLikesForPost;
             numberOfLikes.setText(numberOfLikesForPost + likesString);
-        }
-
-        private void setOnClickListenerForLikes() {
-            likeImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RetroService retrofitService = RetrofitService.getRetrofitInstance().create(RetroService.class);
-
-                    LikeOrUnlikePostRequest likeOrUnlikePostRequest = new LikeOrUnlikePostRequest();
-                    likeOrUnlikePostRequest.setUserId(LocalAuthService.getInstance().getSecretKey());
-                    likeOrUnlikePostRequest.setPostId(postId);
-
-                    if(isLiked) {
-                        isLiked = !isLiked;
-                        if(numberOfLikesForPostInt != null) {
-                            setNumberOfLikes(numberOfLikesForPostInt-1);
-                            setLikedOrUnlikedIcon(isLiked);
-                        }
-                    } else {
-                        isLiked = !isLiked;
-                        setNumberOfLikes(numberOfLikesForPostInt+1);
-                        setLikedOrUnlikedIcon(isLiked);
-                    }
-
-                    Call<LikeOrUnlikePostResponse> call = retrofitService.likeOrUnlikePost(likeOrUnlikePostRequest);
-                    call.enqueue(new Callback<LikeOrUnlikePostResponse>() {
-                        @Override
-                        public void onResponse(Call<LikeOrUnlikePostResponse> call, Response<LikeOrUnlikePostResponse> response) {
-                            return;
-                        }
-
-                        @Override
-                        public void onFailure(Call<LikeOrUnlikePostResponse> call, Throwable t) {
-                            return;
-                        }
-                    });
-                }
-            });
         }
     }
 }
