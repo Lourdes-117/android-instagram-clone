@@ -13,16 +13,13 @@ import com.bumptech.glide.Glide;
 import com.example.inztagram.Models.LikeOrUnlikePostRequest;
 import com.example.inztagram.Models.LikeOrUnlikePostResponse;
 import com.example.inztagram.Models.PostModel;
-import com.example.inztagram.Models.UserLoginResponse;
 import com.example.inztagram.R;
 import com.example.inztagram.Service.LocalAuthService;
 import com.example.inztagram.Service.apiService.RetroService;
 import com.example.inztagram.Service.apiService.RetrofitService;
 import com.example.inztagram.utility.EndpointBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
