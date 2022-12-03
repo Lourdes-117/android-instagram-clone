@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private Context context;
     private List<PostModel> posts;
 
@@ -35,11 +36,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.post_item, parent, false);
-        return new PostAdapter.ViewHolder(view);
+        return new PostViewHolder(view);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
 
     public void addMorePosts(List<PostModel> posts) {
         this.posts.addAll(posts);
@@ -49,7 +54,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         PostModel post = posts.get(position);
 
         holder.postId = post.getFileId();
@@ -68,7 +73,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.imageCaption.setText(post.getImageCaption());
     }
 
-    private void setProfilePhoto(ViewHolder holder, String userName) {
+    private void setProfilePhoto(PostViewHolder holder, String userName) {
         Drawable drawable = holder.profileImage.getDrawable();
         Glide.with(holder.itemView.getContext())
                 .asBitmap()
@@ -77,7 +82,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 .into(holder.profileImage);
     }
 
-    private void setOnClickListenerForLikes(ViewHolder holder) {
+    private void setOnClickListenerForLikes(PostViewHolder holder) {
         holder.likeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +125,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return posts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class PostViewHolder extends RecyclerView.ViewHolder {
         public ImageView profileImage;
         public ImageView postImage;
         public ImageView likeImage;
@@ -137,7 +142,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private Integer numberOfLikesForPostInt = 0;
         private String postId;
 
-        public ViewHolder(@NonNull View itemView) {
+        public PostViewHolder(@NonNull View itemView) {
             super(itemView);
             setElements();
         }
@@ -166,6 +171,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
             numberOfLikesForPostInt = numberOfLikesForPost;
             numberOfLikes.setText(numberOfLikesForPost + likesString);
+        }
+    }
+
+    private class LoadingViewHolder extends RecyclerView.ViewHolder {
+        ProgressBar progressBar;
+        public LoadingViewHolder(@NonNull View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.progressBar);
         }
     }
 }

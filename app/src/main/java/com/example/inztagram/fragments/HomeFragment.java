@@ -1,6 +1,8 @@
 package com.example.inztagram.fragments;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,21 +12,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.inztagram.Models.HomePostResponse;
 import com.example.inztagram.Models.PostModel;
 import com.example.inztagram.R;
 import com.example.inztagram.adapter.PostAdapter;
 import com.example.inztagram.viewModels.HomeViewModel;
-import com.example.inztagram.viewModels.PostImageViewModel;
 
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private PostAdapter adapter;
-    HomeViewModel viewModel;
-    View view;
+    private HomeViewModel viewModel;
+    private View view;
+    private boolean isLoading = false;
+    private int numberOfPostsAvailable = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,15 +61,39 @@ public class HomeFragment extends Fragment {
         viewModel.getHomePagePostsLiveData().observe(getViewLifecycleOwner(), new Observer<List<PostModel>>() {
             @Override
             public void onChanged(List<PostModel> postModels) {
+                isLoading = false;
                 if(postModels != null) {
+                    numberOfPostsAvailable += postModels.size();
                     adapter.addMorePosts(postModels);
                     return;
+                }
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == numberOfPostsAvailable - 1) {
+                        //bottom of list!
+                        getPosts();
+                    }
                 }
             }
         });
     }
 
     private void getPosts() {
+        isLoading = true;
         viewModel.getPosts();
     }
 }
