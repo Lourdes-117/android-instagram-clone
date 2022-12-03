@@ -66,16 +66,17 @@ public class MyPostsFragment extends Fragment {
             @Override
             public void onChanged(List<PostModel> postModels) {
                 isLoading = false;
-                if(postModels.isEmpty()) {
-                    if(pagination == 0) {
-                        noPostsFoundView.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.INVISIBLE);
-                    }
+                pagination += 1;
+                if(!postModels.isEmpty()) {
+                    numberOfPostsAvailable += postModels.size();
+                    adapter.addMorePosts(postModels);
+                }
+                if(numberOfPostsAvailable <= 0) {
+                    noPostsFoundView.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
                 } else {
                     noPostsFoundView.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.VISIBLE);
-                    numberOfPostsAvailable += postModels.size();
-                    adapter.addMorePosts(postModels);
                 }
             }
         });
