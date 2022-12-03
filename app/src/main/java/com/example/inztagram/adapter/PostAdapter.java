@@ -21,13 +21,17 @@ import com.example.inztagram.Service.apiService.RetrofitService;
 import com.example.inztagram.utility.EndpointBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<PostModel> posts;
+    private List<PostModel> posts = new ArrayList<>();
+    private final int VIEW_TYPE_POST = 0;
+    private final int VIEW_TYPE_LOADING = 1;
 
     public PostAdapter(Context context) {
         this.context = context;
@@ -36,14 +40,24 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     @NonNull
     @Override
-    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.post_item, parent, false);
-        return new PostViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_POST) {
+            View view = LayoutInflater.from(context).inflate(R.layout.post_item, parent, false);
+            return new PostViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loading, parent, false);
+            return new LoadingViewHolder(view);
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        try {
+            return posts.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_POST;
+        } catch (Exception exception) {
+            return VIEW_TYPE_LOADING;
+        }
+
     }
 
     public void addMorePosts(List<PostModel> posts) {
@@ -54,7 +68,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
 
     @Override
-    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof PostViewHolder) {
+            this.populatePostWithValue((PostViewHolder) holder, position);
+        } else if (holder instanceof LoadingViewHolder) {
+            showLoadingView((LoadingViewHolder) holder, position);
+        }
+    }
+
+    private void populatePostWithValue(PostViewHolder holder, int position) {
         PostModel post = posts.get(position);
 
         holder.postId = post.getFileId();
@@ -71,6 +93,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.userName.setText(post.getUserName());
         holder.numberOfLikes.setText(post.getLikes().size() + "Likes");
         holder.imageCaption.setText(post.getImageCaption());
+    }
+
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+        //ProgressBar would be displayed
     }
 
     private void setProfilePhoto(PostViewHolder holder, String userName) {
@@ -92,13 +118,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 likeOrUnlikePostRequest.setUserId(LocalAuthService.getInstance().getSecretKey());
                 likeOrUnlikePostRequest.setPostId(holder.postId);
 
+                PostModel postSelected = null;
+                for (int i = 0; i < posts.size(); i++) {
+                    PostModel post = posts.get(i);
+                    if(post.getFileId() == holder.postId) {
+                        postSelected = post;
+                    }
+                }
+
+                if(postSelected == null) { return; }
+
                 if(holder.isLiked) {
+                    postSelected.getLikes().remove(LocalAuthService.getInstance().getUserName());
                     holder.isLiked = !holder.isLiked;
                     if(holder.numberOfLikesForPostInt != null) {
                         holder.setNumberOfLikes(holder.numberOfLikesForPostInt-1);
                         holder.setLikedOrUnlikedIcon(holder.isLiked);
                     }
                 } else {
+                    postSelected.getLikes().add(LocalAuthService.getInstance().getUserName());
                     holder.isLiked = !holder.isLiked;
                     holder.setNumberOfLikes(holder.numberOfLikesForPostInt+1);
                     holder.setLikedOrUnlikedIcon(holder.isLiked);
@@ -122,7 +160,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return posts.size() + 1;
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder {
