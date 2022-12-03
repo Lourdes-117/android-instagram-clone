@@ -86,8 +86,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:layout_marginHorizontal="25dp"
+        android:height="50dp"
         android:text="Log Out"
         android:backgroundTint="#FF3B30"
         android:textColor="#ffffff"/>

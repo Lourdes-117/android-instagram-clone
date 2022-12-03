@@ -10,6 +10,7 @@ import com.example.inztagram.Models.PostModel;
 import com.example.inztagram.Models.PostUploadResponse;
 import com.example.inztagram.Models.UserLoginRequest;
 import com.example.inztagram.Models.UserLoginResponse;
+import com.example.inztagram.Models.UserLogoutRequest;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.Models.UserRegisterResponse;
 
@@ -52,6 +53,10 @@ public interface RetroService {
     @POST("getDetailsOfUser")
     @Headers({"Accept:application/json", "Content-Type:application/json"})
     Call<UserRegisterRequest> getDetailsOfUser(@Body GetDetailsOfUserRequest getDetailsOfUserRequest);
+
+    @POST("logout")
+    @Headers({"Accept:application/json", "Content-Type:application/json"})
+    Call<UserRegisterRequest> logoutUser(@Body UserLogoutRequest userLogoutRequest);
 
     @Multipart
     @POST("upload-profile-photo")

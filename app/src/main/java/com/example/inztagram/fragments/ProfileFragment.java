@@ -1,5 +1,6 @@
 package com.example.inztagram.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.R;
+import com.example.inztagram.controllers.LandingPage;
 import com.example.inztagram.utility.EndpointBuilder;
 import com.example.inztagram.viewModels.ProfileViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -125,7 +127,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void handleLogout() {
-
+        viewModel.logoutUser();
+        Intent intent = new Intent(getContext(), LandingPage.class);
+        startActivity(intent);
     }
 
     private void handleEditProfilePic() {

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.inztagram.Models.GetDetailsOfUserRequest;
 import com.example.inztagram.Models.PostUploadResponse;
+import com.example.inztagram.Models.UserLogoutRequest;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.Service.LocalAuthService;
 import com.example.inztagram.Service.apiService.RetroService;
@@ -78,5 +79,23 @@ public class ProfileViewModel extends ViewModel {
                 getUserDetails();
             }
         });
+    }
+
+    public void logoutUser() {
+        RetroService retrofitService = RetrofitService.getRetrofitInstance().create(RetroService.class);
+        UserLogoutRequest userLogoutRequest = new UserLogoutRequest();
+        userLogoutRequest.setUserId(LocalAuthService.getInstance().getSecretKey());
+
+        Call<UserRegisterRequest> call = retrofitService.logoutUser(userLogoutRequest);
+        call.enqueue(new Callback<UserRegisterRequest>() {
+            @Override
+            public void onResponse(Call<UserRegisterRequest> call, Response<UserRegisterRequest> response) {
+            }
+
+            @Override
+            public void onFailure(Call<UserRegisterRequest> call, Throwable t) {
+            }
+        });
+        LocalAuthService.getInstance().logoutUser();
     }
 }
