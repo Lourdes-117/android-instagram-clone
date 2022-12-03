@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import com.example.inztagram.R;
 import com.example.inztagram.fragments.HomeFragment;
-import com.example.inztagram.fragments.NotificationFragment;
+import com.example.inztagram.fragments.MyPostsFragment;
 import com.example.inztagram.fragments.ProfileFragment;
 import com.example.inztagram.fragments.SearchFragment;
 import com.example.inztagram.utility.InztaAppCompatActivity;
@@ -52,7 +52,7 @@ public class HomeActivity extends InztaAppCompatActivity {
                         startActivity(new Intent(HomeActivity.this, PostImageActivity.class));
                         break;
                     case R.id.nav_saved:
-                        selectorFragment = new NotificationFragment();
+                        selectorFragment = new MyPostsFragment();
                         break;
                     case R.id.nav_profile:
                         selectorFragment = new ProfileFragment();
