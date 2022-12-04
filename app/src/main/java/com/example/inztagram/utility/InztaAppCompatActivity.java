@@ -7,6 +7,9 @@ import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.example.inztagram.R;
 import com.google.android.material.snackbar.Snackbar;
 
 public class InztaAppCompatActivity extends AppCompatActivity {
@@ -46,5 +49,9 @@ public class InztaAppCompatActivity extends AppCompatActivity {
         if(progressDialog != null) {
             progressDialog.dismiss();
         }
+    }
+
+    public void replaceFragment(int fragmentId, Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(fragmentId, fragment).commit();
     }
 }

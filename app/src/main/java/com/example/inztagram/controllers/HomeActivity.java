@@ -67,7 +67,7 @@ public class HomeActivity extends InztaAppCompatActivity implements UserLogoutDe
                         break;
                 }
                 if(selectorFragment != null) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectorFragment).commit();
+                    replaceFragment(R.id.fragment_container, selectorFragment);
                 }
                 return selectorFragment != null;
             }
