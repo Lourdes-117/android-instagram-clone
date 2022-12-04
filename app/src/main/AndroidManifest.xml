@@ -36,20 +36,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".controllers.LoginActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".controllers.RegisterActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".controllers.LandingPage"
             android:exported="true">
             <intent-filter>

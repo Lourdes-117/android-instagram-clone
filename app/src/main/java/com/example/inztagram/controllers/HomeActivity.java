@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.example.inztagram.Models.UserLogoutDelegate;
 import com.example.inztagram.R;
 import com.example.inztagram.fragments.HomeFragment;
@@ -76,8 +75,5 @@ public class HomeActivity extends InztaAppCompatActivity implements UserLogoutDe
 
     @Override
     public void logoutUser() {
-        Intent intent = new Intent(this, LandingPage.class);
-        startActivity(intent);
-        finish();
     }
 }
