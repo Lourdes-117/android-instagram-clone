@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.example.inztagram.Models.UserLogoutDelegate;
 import com.example.inztagram.Models.UserRegisterRequest;
 import com.example.inztagram.R;
-import com.example.inztagram.controllers.LandingPage;
 import com.example.inztagram.utility.EndpointBuilder;
 import com.example.inztagram.viewModels.ProfileViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,8 +48,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-    public UserLogoutDelegate delegate;
 
     private View view;
 
@@ -130,10 +127,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void handleLogout() {
-        viewModel.logoutUser();
-        if(delegate != null) {
-            delegate.logoutUser();
-        }
+
     }
 
     private void handleEditProfilePic() {

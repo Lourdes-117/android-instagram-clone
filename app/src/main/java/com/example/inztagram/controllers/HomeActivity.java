@@ -2,7 +2,6 @@ package com.example.inztagram.controllers;
 
 import android.os.Bundle;
 import com.example.inztagram.R;
-import com.example.inztagram.fragments.HomeFragment;
 import com.example.inztagram.utility.InztaAppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,7 +16,6 @@ public class HomeActivity extends InztaAppCompatActivity {
         setContentView(R.layout.activity_home);
 
         setElements();
-        replaceFragment(R.id.fragment_container, new HomeFragment());
     }
 
     private void setElements() {
